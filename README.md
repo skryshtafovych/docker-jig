@@ -6,6 +6,9 @@ Have you recently built a web app and wish to conduct some performance testing o
 ## How it works in a nutshell
 JMeter runs the load test, the results of the test are stored in InfluxDB, and Grafana reads the results from InfluxDB and visualizes them into graphs and dashboards. Docker eliminates all manual setup steps and packages everything together.
 
+## To-Do
+- Add example that works with test  
+
 ## How to use it
 - Clone the repo by running `git clone https://github.com/jlight99/docker-jig.git`
 - Navigate to the test folder of the repo by running `cd dockerjig/jmeter/test`
