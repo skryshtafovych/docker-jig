@@ -6,17 +6,20 @@ WORKDIR /jmeter
 
 # Copy contents of current directory to /jmeter
 COPY . /jmeter
+COPY /lib/ /jmeter/lib
+COPY /lib/ext/ /jmeter/lib/ext
 
-# Install openjre (required in order to run jmeter) 
+
+# Install openjre (required in order to run jmeter)
 RUN apk add --no-cache \
 	openjdk8-jre
 
 # Install jmeter
 ARG jmeterVersion
-ENV JMETER_VERSION ${jmeterVersion} 
-ENV JMETER_HOME apache-jmeter-${JMETER_VERSION}
+ENV JMETER_VERSION 5.1.1
+ENV JMETER_HOME apache-jmeter-5.1.1
 ENV JMETER_BIN ${JMETER_HOME}/bin
-RUN wget -O /jmeter/apache-jmeter.tgz "http://mirror.its.dal.ca/apache//jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz" \
+RUN wget -O /jmeter/apache-jmeter.tgz "http://mirror.its.dal.ca/apache//jmeter/binaries/apache-jmeter-5.1.1.tgz" \
 	&& tar xvzf apache-jmeter.tgz
 
 # Edit jmeter.properties, point to correct user.properties, use Rhino implementation of Javascript (Nashorn will be deprecated)

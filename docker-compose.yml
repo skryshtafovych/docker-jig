@@ -17,6 +17,7 @@ services:
                 depends_on:
                         - influxdb
         grafana:
+                image: grafana:latest
                 build:
                         context: "grafana"
                 ports:
