@@ -1,27 +1,36 @@
-version: '3'
+version: '3.8'
 
 services:
-        influxdb:
-                image: influxdb:1.7-alpine
-                ports:
-                       - "8086:8086"
-                environment:
-                        - INFLUXDB_DB=jmeter
-        jmeter:
-                build:
-                        context: "jmeter"
-                        args:
-                                - jmeterVersion=5.1.1
-                environment:
-                        - JMETER_TEST=default_test_plan.jmx
-                depends_on:
-                        - influxdb
-        grafana:
-                image: grafana:latest
-                build:
-                        context: "grafana"
-                ports:
-                        - "3000:3000"
-                depends_on:
-                        - influxdb
-                        - jmeter
+  influxdb:
+    image: influxdb:2.7-alpine
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    environment:
+      - INFLUXDB_DB=jmeter
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=jmeter
+      - DOCKER_INFLUXDB_INIT_PASSWORD=jmeter
+      - DOCKER_INFLUXDB_INIT_ORG=jmeter
+      - DOCKER_INFLUXDB_INIT_BUCKET=jmeter
+
+  jmeter:
+    image: justb4/jmeter:latest
+    volumes:
+      - ./jmeter/test:/jmeter/test
+    environment:
+      - JMETER_TEST=test/default_test_plan.jmx
+    depends_on:
+      - influxdb
+
+  grafana:
+    build:
+      context: "grafana"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - influxdb
+
+volumes:
+  influxdb_data:
